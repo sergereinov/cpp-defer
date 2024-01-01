@@ -50,7 +50,7 @@ bool example2()
         // you can't RAII because the scope is different
         // or don't want RAII due to readability or simplicity
         ptr = malloc(sz);
-        if (ptr) defer += [&ptr] { free(ptr); };
+        if (ptr) defer += [ptr] { free(ptr); };
     }
 
     // if fail then report false
@@ -62,6 +62,30 @@ bool example2()
 
     // report true and release resource via defer
     return true;
+}
+```
+
+## Alternatives
+
+There are alternative options for implementing an external deferred destructor.
+Similar problems are discussed, for example, in https://stackoverflow.com/a/33055669 and https://stackoverflow.com/q/32432450
+
+Here is an example of one of the short ways to solve the same problem using `std::shared_ptr` and a custom deleter.
+
+```C++
+using defer_t = std::shared_ptr<void>;
+template <class Dx>
+constexpr inline defer_t make_defer(Dx dx) { return defer_t(nullptr, dx); }
+
+long file_len(const char* filename)
+{
+    auto file = fopen(filename, "rb");
+    if (!file) return 0;
+
+    auto _ = make_defer([file](auto) { fclose(file); });
+
+    fseek(file, 0, SEEK_END);
+    return ftell(file);
 }
 ```
 
