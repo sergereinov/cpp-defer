@@ -28,13 +28,15 @@ defer_t defer;
 defer += [] { std::cout << "Bye! I'm out." << std::endl; };
 ```
 
+*TODO: warn about reverse destruction order for local objects.*
+
 **Example 1:** lambdas call order demo.
 ```C++
 void example1()
 {
-    defer_t defer;
-
     int a = 0;
+
+    defer_t defer;
     defer += [&a] { std::cout << "defer #1: 'a' is " << a << std::endl; };
 
     std::cout << "touch point #1: 'a' is " << a << std::endl;
