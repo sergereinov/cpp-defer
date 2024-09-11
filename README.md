@@ -5,12 +5,12 @@
 It is considered good practice to use the [RAII](https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization) approach when acquiring and releasing a resource.
 
 But sometimes RAII looks bulky.
-Perhaps you need to write a special wrapper for RAII and this adds extra entities and new meanings.
-You must remember to handle all obvious and non-obvious uses of this new serving entity.
+Sometimes you need to write a special wrapper for RAII and this adds extra entities and new meanings.
+You should be aware of handling all obvious and non-obvious uses of this new serving entity.
 
 In addition, RAII hides the details of resource acquisition and release. This isn't always a good thing.
 
-Besides RAII, there is another approach to deferred guaranteed resource release.
+Besides RAII, there is another approach to deferred guaranteed releasing a resource.
 In golang, this is one of the uses of the [`defer`](https://go.dev/tour/flowcontrol/12) operator.
 It postpones calling all lambdas passed to it until the function returns.
 
@@ -107,6 +107,10 @@ long file_len(const char* filename)
     return ftell(file);
 }
 ```
+
+## Similar thoughts
+
+- An interesting pure C implementation of `defer` for gnuc, clang and Intel compiler - https://github.com/Psteven5/cbinc
 
 ## License
 MIT
